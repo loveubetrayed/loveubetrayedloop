@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/*
+  Swapping in a licensed font later (e.g. Atyp Kido Trial, if you buy/own it):
+  1. Put the font files (e.g. AtypKido-ExtraLight.woff2) in /public/fonts
+  2. Add here:
+       @font-face {
+         font-family: "Atyp Kido";
+         src: url("/fonts/AtypKido-ExtraLight.woff2") format("woff2");
+         font-weight: 300;
+         font-display: swap;
+       }
+  3. In tailwind.config.ts, point fontFamily.display at "Atyp Kido" instead of
+     var(--font-display), and remove the Jost import in app/layout.tsx.
+  Right now the display font is Jost at light weights — a free, close match
+  to that thin/geometric look.
+*/
+
+html { background: #FAF9F6; }
+
+body {
+  background-color: #FAF9F6;
+  color: #1A1A1A;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+::selection { background: #FF5B9E; color: #FFFFFF; }
+
+*:focus-visible {
+  outline: 2px solid #FF5B9E;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.tag-chip {
+  font-family: var(--font-mono), monospace;
+  border: 1px solid #ECE7E1;
+  color: #6B6860;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: #fff;
+}
+.tag-chip[data-active="true"] {
+  border-color: #FF5B9E;
+  color: #FF5B9E;
+  background: #FFF0F6;
+}
+
+.filter-pill {
+  border: 1px solid #ECE7E1;
+  color: #6B6860;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+.filter-pill[data-active="true"] {
+  border-color: #1A1A1A;
+  background: #1A1A1A;
+  color: #fff;
+}
+
+.underline-grow {
+  position: relative;
+}
+.underline-grow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 0%;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+.underline-grow:hover::after,
+.underline-grow[data-active="true"]::after {
+  width: 100%;
+}
+
+.scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #ECE7E1; border-radius: 3px; }
+
+/* Marquee banner — the one recurring brand moment, now a fine editorial detail
+   instead of a loud block */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+.admin-input {
+  border: 1px solid #ECE7E1;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #1A1A1A;
+  background: #fff;
+  outline: none;
+}
+.admin-input:focus {
+  border-color: #FF5B9E;
+}
+.heart-btn svg { transition: all 0.15s ease; }
+.heart-btn[data-active="true"] svg {
+  fill: #FF5B9E;
+  stroke: #FF5B9E;
+}
+
+.pulse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #FF5B9E;
+  opacity: 0;
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring { animation: none; opacity: 0; }
+}
+
+.preview-label {
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.group:hover .preview-label {
+  opacity: 1;
+  transform: translateY(0);
+}
