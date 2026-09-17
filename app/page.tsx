@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getProducts } from "@/lib/store";
 import { getDownloadCounts } from "@/lib/leads";
 import ProductCard from "@/components/ProductCard";
+import Reveal from "@/components/Reveal";
 import HeroSection from "@/components/HeroSection";
 import Squiggle from "@/components/Squiggle";
 import { FREE_MODE } from "@/lib/site-config";
@@ -33,8 +34,10 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => (
-            <ProductCard key={p.slug} product={p} downloadCount={counts[p.slug] || 0} />
+          {featured.map((p, i) => (
+            <Reveal key={p.slug} index={i}>
+              <ProductCard product={p} downloadCount={counts[p.slug] || 0} />
+            </Reveal>
           ))}
         </div>
 

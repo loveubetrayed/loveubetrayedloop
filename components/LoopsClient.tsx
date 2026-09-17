@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
+import Reveal from "@/components/Reveal";
 import Squiggle from "@/components/Squiggle";
 import type { Product } from "@/lib/seed-data";
 import { FREE_MODE } from "@/lib/site-config";
@@ -143,8 +144,10 @@ function LoopsContent({ products, counts }: { products: Product[]; counts: Recor
         <p className="mt-16 text-center text-sm text-mute">No kits match those filters yet.</p>
       ) : (
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((p) => (
-            <ProductCard key={p.slug} product={p} downloadCount={counts[p.slug] || 0} />
+          {visible.map((p, i) => (
+            <Reveal key={p.slug} index={i}>
+              <ProductCard product={p} downloadCount={counts[p.slug] || 0} />
+            </Reveal>
           ))}
         </div>
       )}

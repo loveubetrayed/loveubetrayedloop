@@ -29,13 +29,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-30 px-4 pt-4 sm:px-6">
-      <div className="mx-auto flex max-w-5xl items-center justify-between rounded-full border border-line bg-white/90 px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.04)] backdrop-blur-md">
-        <Link href="/" className="flex shrink-0 items-center gap-1.5">
+      <div className="mx-auto grid max-w-5xl grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full border border-line bg-white/90 px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.04)] backdrop-blur-md">
+        <Link href="/" className="flex shrink-0 items-center gap-1.5 justify-self-start">
           <span className="text-pink">✦</span>
           <span className="text-lg font-semibold lowercase tracking-tight text-ink">iloveubetrayed</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm text-mute md:flex">
+        <nav className="hidden items-center justify-center gap-7 justify-self-center text-sm text-mute md:flex">
           {NAV.map((item) => {
             const active = pathname === item.href.split("?")[0];
             return (
@@ -51,7 +51,7 @@ export default function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-self-end">
           {searchOpen ? (
             <form onSubmit={submitSearch} className="flex items-center">
               <input

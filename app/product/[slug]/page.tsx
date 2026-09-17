@@ -4,6 +4,7 @@ import { getProduct, getProducts } from "@/lib/store";
 import { getDownloadCounts } from "@/lib/leads";
 import AddToCartPanel from "@/components/AddToCartPanel";
 import ProductCard from "@/components/ProductCard";
+import Reveal from "@/components/Reveal";
 import Squiggle from "@/components/Squiggle";
 import AudioPlayer from "@/components/AudioPlayer";
 import EmailGateForm from "@/components/EmailGateForm";
@@ -90,8 +91,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
             <Squiggle className="h-4 w-12 text-pink" />
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((p) => (
-              <ProductCard key={p.slug} product={p} downloadCount={counts[p.slug] || 0} />
+            {related.map((p, i) => (
+              <Reveal key={p.slug} index={i}>
+                <ProductCard product={p} downloadCount={counts[p.slug] || 0} />
+              </Reveal>
             ))}
           </div>
         </div>
