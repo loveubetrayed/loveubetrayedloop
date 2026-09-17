@@ -2,19 +2,18 @@ import { Redis } from "@upstash/redis";
 
 // Vercel KV was discontinued — this now talks to Upstash Redis, which you
 // connect via Vercel's Marketplace (Storage tab → add a Redis integration →
-// Connect to project). That auto-adds UPSTASH_REDIS_REST_URL and
-// UPSTASH_REDIS_REST_TOKEN to your project's env vars — nothing else to wire up.
+// Connect to project). Vercel's integration has been seen injecting the
+// database credentials under two different naming schemes depending on how
+// it was set up — the current one (UPSTASH_REDIS_REST_URL/TOKEN) and the
+// older "Vercel KV" one (KV_REST_API_URL/TOKEN). We accept either so you
+// don't have to care which one you got.
 
-export const kvConfigured = Boolean(
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-);
+const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
-const client = kvConfigured
-  ? new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL!,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN!
-    })
-  : null;
+export const kvConfigured = Boolean(url && token);
+
+const client = kvConfigured ? new Redis({ url: url!, token: token! }) : null;
 
 // A tiny wrapper so every call site doesn't need its own try/catch — if Redis
 // isn't configured yet (or a request fails), callers just get `null`/`false`
