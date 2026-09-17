@@ -51,17 +51,17 @@ export default function HeroSection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-6xl px-6 pt-20 sm:pt-28">
+      <div className="relative mx-auto max-w-6xl px-6 pt-10 sm:pt-14">
         <p className="font-mono text-sm text-mute">sample packs / loop kits</p>
-        <h1 className="mt-4 max-w-2xl font-display text-5xl font-light leading-[1.08] text-pink sm:text-6xl">
+        <h1 className="mt-3 max-w-2xl font-display text-4xl font-light leading-[1.08] text-pink sm:text-5xl">
           premium loops for your sound
         </h1>
-        <p className="mt-6 max-w-md text-base leading-relaxed text-mute">
+        <p className="mt-4 max-w-md text-base leading-relaxed text-mute">
           Curated loops, melodies, drums and one-shots. Instant download, 100% royalty-free,
           built for whatever you're making tonight.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div className="mt-6 flex flex-wrap items-center gap-4">
           <Link
             href="/loops"
             className="rounded-full bg-pink px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
@@ -76,14 +76,14 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-mute">
+        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-mute">
           <span>⚡ Instant download</span>
           <span>✓ 100% royalty-free</span>
           <span>{FREE_MODE ? "📧 Just your email — no card needed" : "🔒 Secure checkout via Stripe"}</span>
         </div>
       </div>
 
-      <div className="relative mt-20 border-y border-line/70 py-4 sm:mt-28">
+      <div className="relative mt-8 border-y border-line/70 py-3 sm:mt-10">
         <div className="marquee-track flex items-center whitespace-nowrap">
           {[...marqueeItems, ...marqueeItems].map((word, i) => (
             <span key={i} className="text-sm font-medium lowercase tracking-wide text-mute">

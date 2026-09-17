@@ -84,7 +84,8 @@ export default function ProductCard({ product, downloadCount = 0 }: { product: P
   }
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-panel transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-panel transition duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]">
+      <div className="h-[3px] w-full" style={{ background: product.cover.accent }} />
       <Link
         href={`/product/${product.slug}`}
         onMouseEnter={startPreview}
@@ -174,8 +175,8 @@ export default function ProductCard({ product, downloadCount = 0 }: { product: P
         </div>
 
         <div className="mt-auto flex items-center justify-between pt-2 text-sm">
-          <span className="text-mute">
-            {product.bpm} BPM <span className="mx-1 text-line">/</span> {product.key}
+          <span className="flex items-center gap-1 rounded-full border border-line bg-cream px-2.5 py-1 font-mono text-[0.68rem] text-mute">
+            ♪ {product.key}
           </span>
           {!FREE_MODE && (
             <span className="font-display text-lg text-ink">
