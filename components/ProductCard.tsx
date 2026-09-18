@@ -16,8 +16,25 @@ export default function ProductCard({ product, downloadCount = 0 }: { product: P
   const { active: favorited, toggle } = useFavorite(product.slug);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeRef = useRef<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
   const [added, setAdded] = useState(false);
+
+  // Subtle mouse-tracked tilt — the one extra premium touch that makes a
+  // static card grid feel alive without being gimmicky.
+  function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
+    const el = cardRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(800px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 6).toFixed(2)}deg) translateY(-4px)`;
+  }
+  function resetTilt() {
+    const el = cardRef.current;
+    if (el) el.style.transform = "";
+  }
 
   useEffect(() => () => {
     audioRef.current?.pause();
@@ -81,7 +98,12 @@ export default function ProductCard({ product, downloadCount = 0 }: { product: P
   }
 
   return (
-    <div className="group relative overflow-hidden rounded-[28px] bg-panel shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]">
+    <div
+      ref={cardRef}
+      onMouseMove={handleTilt}
+      onMouseLeave={resetTilt}
+      className="group relative overflow-hidden rounded-[28px] bg-panel shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-200 ease-out will-change-transform hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+    >
       <Link
         href={`/product/${product.slug}`}
         onMouseEnter={startPreview}

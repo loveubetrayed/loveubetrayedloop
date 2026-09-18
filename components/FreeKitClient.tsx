@@ -65,12 +65,12 @@ function FreeKitContent({ freeProduct }: { freeProduct: Product }) {
     <section className="mx-auto max-w-3xl px-6 py-16">
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:items-center">
         {freeProduct.image ? (
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-line sm:aspect-[16/9]">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-line sm:aspect-[4/5]">
             <Image src={freeProduct.image} alt={freeProduct.title} fill sizes="50vw" className="object-cover" />
           </div>
         ) : (
           <div
-            className="aspect-[16/9] rounded-2xl border border-line sm:aspect-[16/9]"
+            className="aspect-[4/5] rounded-[28px] border border-line sm:aspect-[4/5]"
             style={{
               background: `radial-gradient(120% 140% at 20% 10%, ${freeProduct.cover.accent}44, transparent 55%), linear-gradient(140deg, ${freeProduct.cover.from}, ${freeProduct.cover.to})`
             }}

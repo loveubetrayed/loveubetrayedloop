@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import Squiggle from "@/components/Squiggle";
 import AudioPlayer from "@/components/AudioPlayer";
 import EmailGateForm from "@/components/EmailGateForm";
+import ShareButton from "@/components/ShareButton";
 import { FREE_MODE } from "@/lib/site-config";
 
 // Products can be edited anytime via /admin (stored in KV), so these pages
@@ -26,59 +27,67 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-        {product.image ? (
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-line">
-            <Image src={product.image} alt={product.title} fill sizes="50vw" className="object-cover" />
-          </div>
-        ) : (
-          <div
-            className="aspect-[16/9] rounded-2xl border border-line"
-            style={{
-              background: `radial-gradient(120% 140% at 20% 10%, ${product.cover.accent}33, transparent 55%), linear-gradient(140deg, ${product.cover.from}, ${product.cover.to})`
-            }}
-          />
-        )}
-
-        <div className="flex flex-col">
-          <span className="text-xs tracking-wide text-mute">{product.kind}</span>
-          <h1 className="mt-2 font-display text-4xl text-ink">{product.title}</h1>
-          <p className="mt-2 text-sm text-mute">{product.contains.join(" / ")}</p>
-
-          <p className="mt-6 max-w-md text-sm leading-relaxed text-mute">{product.description}</p>
-
-          <div className="mt-6 flex flex-wrap gap-1.5">
-            {product.tags.map((t) => (
-              <span key={t} className="tag-chip">
-                {t}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-6 flex items-center gap-6 text-sm text-mute">
-            <span>{product.bpm} BPM</span>
-            <span className="h-1 w-1 rounded-full bg-line" />
-            <span>{product.key}</span>
-            {counts[product.slug] >= 3 && (
-              <>
-                <span className="h-1 w-1 rounded-full bg-line" />
-                <span className="font-mono text-xs">🎧 {counts[product.slug].toLocaleString()} got this</span>
-              </>
+      <Reveal>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+          <div className="relative">
+            {/* Soft ambient glow in the kit's own accent color — ties the
+                per-kit color identity back in without a flat literal stripe. */}
+            <div
+              className="absolute -inset-6 -z-10 rounded-[40px] opacity-50 blur-2xl"
+              style={{ background: product.cover.accent }}
+            />
+            {product.image ? (
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-line">
+                <Image src={product.image} alt={product.title} fill sizes="50vw" className="object-cover" />
+              </div>
+            ) : (
+              <div
+                className="aspect-[4/5] rounded-[28px] border border-line"
+                style={{
+                  background: `radial-gradient(120% 140% at 20% 10%, ${product.cover.accent}44, transparent 55%), linear-gradient(155deg, ${product.cover.from}, ${product.cover.to})`
+                }}
+              />
             )}
           </div>
 
-          {FREE_MODE ? (
-            <>
-              <span className="mt-6 w-fit rounded-full bg-pink px-2.5 py-1 text-[0.65rem] font-medium tracking-wide text-white">
-                FREE
-              </span>
-              <EmailGateForm slug={product.slug} title={product.title} />
-            </>
-          ) : (
-            <AddToCartPanel product={product} />
-          )}
+          <div className="flex flex-col">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs tracking-wide text-mute">{product.kind}</span>
+              <ShareButton />
+            </div>
+            <h1 className="mt-2 font-display text-4xl text-ink">{product.title}</h1>
+            <p className="mt-2 text-sm text-mute">{product.contains.join(" / ")}</p>
+
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-mute">{product.description}</p>
+
+            <div className="mt-6 flex flex-wrap gap-1.5">
+              {product.tags.map((t) => (
+                <span key={t} className="tag-chip">
+                  {t}
+                </span>
+              ))}
+              <span className="tag-chip">♪ {product.key}</span>
+            </div>
+
+            {counts[product.slug] >= 3 && (
+              <p className="mt-4 font-mono text-xs text-mute">
+                🎧 {counts[product.slug].toLocaleString()} producers got this kit
+              </p>
+            )}
+
+            {FREE_MODE ? (
+              <>
+                <span className="mt-6 w-fit rounded-full bg-pink px-2.5 py-1 text-[0.65rem] font-medium tracking-wide text-white">
+                  FREE
+                </span>
+                <EmailGateForm slug={product.slug} title={product.title} />
+              </>
+            ) : (
+              <AddToCartPanel product={product} />
+            )}
+          </div>
         </div>
-      </div>
+      </Reveal>
 
       <div className="mt-10">
         <AudioPlayer previewUrl={product.previewUrl} title={product.title} />
