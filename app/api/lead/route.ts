@@ -28,22 +28,21 @@ export async function POST(req: NextRequest) {
     // for backwards compatibility with the original /free page.
     const slug = productSlug || (await getFreeProduct()).slug;
 
-    // No email service configured — there's no way to actually deliver a
-    // confirmation link, so fall back to instant on-screen delivery instead
-    // of leaving the person with a dead end.
-    if (!emailConfigured) {
-      addContact(email);
-      await recordLead(email, "free-kit-confirmed", slug);
-      const downloadUrl = (await getDownloadUrl(slug)) || null;
-      return NextResponse.json({ mode: "instant", downloadUrl });
-    }
-
-    await recordLead(email, "free-kit-requested", slug);
-
     const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const token = signEmailToken(email, slug);
     const confirmUrl = `${origin}/api/confirm?token=${token}`;
 
+    // No email service configured — there's no way to actually deliver a
+    // confirmation link by email, so hand back a link to the same /api/confirm
+    // route directly (still verified, still streamed from our own domain —
+    // just skipping the "check your inbox" step since we can't send mail).
+    if (!emailConfigured) {
+      addContact(email);
+      const hasFile = Boolean(await getDownloadUrl(slug));
+      return NextResponse.json({ mode: "instant", downloadUrl: hasFile ? confirmUrl : null });
+    }
+
+    await recordLead(email, "free-kit-requested", slug);
     await sendConfirmationEmail(email, confirmUrl);
 
     return NextResponse.json({ mode: "confirm" });

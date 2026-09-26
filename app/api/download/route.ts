@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { getDownloadUrl } from "@/lib/store";
+import { streamFile } from "@/lib/stream-file";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // give larger packs room to finish streaming
 
-// The actual file URLs never reach the browser except as a one-time redirect
-// target after Stripe confirms the session is paid AND the requested slug
-// was part of that session.
+// The actual file bytes are streamed through this route rather than
+// redirecting — the visitor's browser only ever sees our own domain, never
+// wherever the file is actually stored. Gated behind Stripe confirming the
+// session is paid AND the requested slug was part of that session.
 export async function GET(req: NextRequest) {
   const sessionId = req.nextUrl.searchParams.get("session_id");
   const slug = req.nextUrl.searchParams.get("slug");
@@ -32,7 +35,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "File not uploaded yet" }, { status: 404 });
     }
 
-    return NextResponse.redirect(fileUrl);
+    return streamFile(fileUrl, `${slug}.zip`);
   } catch (err: any) {
     console.error(err);
     return NextResponse.json({ error: "Couldn't deliver the file" }, { status: 500 });

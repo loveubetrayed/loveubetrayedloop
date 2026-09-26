@@ -3,8 +3,10 @@ import { verifyEmailToken } from "@/lib/email-token";
 import { getDownloadUrl } from "@/lib/store";
 import { addContact } from "@/lib/resend";
 import { recordLead } from "@/lib/leads";
+import { streamFile } from "@/lib/stream-file";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token");
@@ -29,5 +31,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${origin}/free?error=not_uploaded`);
   }
 
-  return NextResponse.redirect(fileUrl);
+  return streamFile(fileUrl, `${result.slug}.zip`);
 }

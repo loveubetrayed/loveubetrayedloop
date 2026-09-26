@@ -28,6 +28,7 @@ body {
   background-color: #FAF9F6;
   color: #1A1A1A;
   font-feature-settings: "liga" 1, "kern" 1;
+  overflow-x: hidden;
 }
 
 ::selection { background: #FF5B9E; color: #FFFFFF; }

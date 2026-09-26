@@ -33,16 +33,27 @@ export default async function ProductPage({ params }: { params: { slug: string }
             {/* Soft ambient glow in the kit's own accent color — ties the
                 per-kit color identity back in without a flat literal stripe. */}
             <div
-              className="absolute -inset-6 -z-10 rounded-[40px] opacity-50 blur-2xl"
+              className="absolute -inset-4 -z-10 rounded-[40px] opacity-40 blur-xl"
               style={{ background: product.cover.accent }}
             />
             {product.image ? (
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-line">
-                <Image src={product.image} alt={product.title} fill sizes="50vw" className="object-cover" />
+              <div
+                className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-[28px] border border-line sm:h-[480px]"
+                style={{
+                  background: `linear-gradient(155deg, ${product.cover.from}, ${product.cover.to})`
+                }}
+              >
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  sizes="50vw"
+                  className="object-contain p-3"
+                />
               </div>
             ) : (
               <div
-                className="aspect-[4/5] rounded-[28px] border border-line"
+                className="flex h-[420px] items-center justify-center rounded-[28px] border border-line sm:h-[480px]"
                 style={{
                   background: `radial-gradient(120% 140% at 20% 10%, ${product.cover.accent}44, transparent 55%), linear-gradient(155deg, ${product.cover.from}, ${product.cover.to})`
                 }}
