@@ -61,7 +61,7 @@ export default function AudioPlayer({ previewUrl, title }: { previewUrl?: string
           )}
         </div>
 
-        <div onClick={seek} className="mt-3 h-1.5 cursor-pointer rounded-full bg-[#F3EFEA]">
+        <div onClick={seek} className="mt-3 h-1.5 cursor-pointer rounded-full bg-blush">
           <div className="h-full rounded-full bg-pink transition-[width]" style={{ width: `${progress}%` }} />
         </div>
 

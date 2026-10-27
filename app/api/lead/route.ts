@@ -31,15 +31,16 @@ export async function POST(req: NextRequest) {
     const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const token = signEmailToken(email, slug);
     const confirmUrl = `${origin}/api/confirm?token=${token}`;
+    const getPageUrl = `${origin}/get/${slug}?token=${token}`;
 
     // No email service configured — there's no way to actually deliver a
-    // confirmation link by email, so hand back a link to the same /api/confirm
-    // route directly (still verified, still streamed from our own domain —
-    // just skipping the "check your inbox" step since we can't send mail).
+    // confirmation link by email, so hand back a link to the same branded
+    // "Download Now" landing page directly, skipping only the "check your
+    // inbox" step since we can't send mail.
     if (!emailConfigured) {
       addContact(email);
       const hasFile = Boolean(await getDownloadUrl(slug));
-      return NextResponse.json({ mode: "instant", downloadUrl: hasFile ? confirmUrl : null });
+      return NextResponse.json({ mode: "instant", downloadUrl: hasFile ? getPageUrl : null });
     }
 
     await recordLead(email, "free-kit-requested", slug);

@@ -102,8 +102,17 @@ export default function ProductCard({ product, downloadCount = 0 }: { product: P
       ref={cardRef}
       onMouseMove={handleTilt}
       onMouseLeave={resetTilt}
-      className="group relative overflow-hidden rounded-[28px] bg-panel shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-200 ease-out will-change-transform hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+      className="group relative overflow-hidden rounded-2xl border border-line bg-panel shadow-[0_14px_30px_-16px_rgba(255,91,158,0.45)] transition-[transform,box-shadow] duration-200 ease-out will-change-transform hover:shadow-[0_26px_48px_-18px_rgba(255,91,158,0.6)]"
     >
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-line bg-white px-3 py-2">
+        <div className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-bubble" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#FF8FBE]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-pink" />
+        </div>
+        <span className="truncate text-center font-mono text-[0.68rem] text-mute">{product.slug}.zip</span>
+        <span className="font-mono text-[0.62rem] text-mute/70">wav·midi</span>
+      </div>
       <Link
         href={`/product/${product.slug}`}
         onMouseEnter={startPreview}

@@ -1,6 +1,7 @@
 import { kv, kvConfigured } from "./kv";
 import { seedProducts, seedFreeProduct, type Product } from "./seed-data";
 import { seedDownloadSources } from "./seed-downloads";
+import { pinkCover } from "./pink";
 
 const PRODUCTS_KEY = "products";
 const FREE_PRODUCT_KEY = "free-product";
@@ -8,14 +9,16 @@ const DOWNLOADS_KEY = "download-sources";
 
 export type { Product };
 
+const toPink = (p: Product): Product => ({ ...p, cover: pinkCover(p.slug) });
+
 export async function getProducts(): Promise<Product[]> {
   const stored = await kv.get<Product[]>(PRODUCTS_KEY);
-  return stored && stored.length > 0 ? stored : seedProducts;
+  return (stored && stored.length > 0 ? stored : seedProducts).map(toPink);
 }
 
 export async function getFreeProduct(): Promise<Product> {
   const stored = await kv.get<Product>(FREE_PRODUCT_KEY);
-  return stored || seedFreeProduct;
+  return toPink(stored || seedFreeProduct);
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {

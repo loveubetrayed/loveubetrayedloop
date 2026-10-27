@@ -5,22 +5,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#FAF9F6",
+        // Pink-only identity: every neutral carries a faint pink undertone
+        cream: "#FAF1F2",
         panel: "#FFFFFF",
-        line: "#ECE7E1",
-        ink: "#1A1A1A",
-        mute: "#8B8880",
+        line: "#F0DCE2",
+        ink: "#1B1418",
+        mute: "#8F7E85",
         pink: "#FF5B9E",
-        pink2: "#C88FFF"
+        rose: "#E8317F",
+        blush: "#FFD9E8",
+        bubble: "#FFB3D1"
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
         body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"]
-      },
-      backgroundImage: {
-        veil: "radial-gradient(ellipse 70% 55% at 50% -5%, rgba(255,91,158,0.14), transparent 60%)",
-        "gradient-title": "linear-gradient(100deg, #FF5B9E 10%, #C88FFF 60%, #FFB8D9 100%)"
       }
     }
   },

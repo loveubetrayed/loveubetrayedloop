@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyEmailToken } from "@/lib/email-token";
-import { getDownloadUrl } from "@/lib/store";
 import { addContact } from "@/lib/resend";
-import { recordLead } from "@/lib/leads";
-import { streamFile } from "@/lib/stream-file";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
 
+// Just verifies the emailed link and hands off to the branded "Download Now"
+// page — it no longer streams the file itself. See /get/[slug] and
+// /api/get-file for the rest of the flow.
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token");
   const origin = req.nextUrl.origin;
@@ -21,15 +20,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${origin}/free?error=expired`);
   }
 
-  // Only now — after the email is proven to be real and reachable — do we
-  // mark it confirmed. Fake/typo'd addresses never make it this far.
+  // The email is proven real and reachable at this point — worth recording
+  // as a contact even before they click the final download button.
   addContact(result.email);
-  await recordLead(result.email, "free-kit-confirmed", result.slug);
 
-  const fileUrl = await getDownloadUrl(result.slug);
-  if (!fileUrl) {
-    return NextResponse.redirect(`${origin}/free?error=not_uploaded`);
-  }
-
-  return streamFile(fileUrl, `${result.slug}.zip`);
+  return NextResponse.redirect(`${origin}/get/${result.slug}?token=${token}`);
 }
